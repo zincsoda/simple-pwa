@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>My First PWA</title>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- iOS-specific meta -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+</head>
+<body>
+  <h1>Hello PWA 👋</h1>
+  <p id="network"></p>
+  <p>This is my first PWA.</p>
+
+  <p id="mode"></p>
+  <p id="loaded"></p>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js');
+  }
+
+  const isStandalone =
+    window.matchMedia('(display-mode: standalone)').matches ||
+    window.navigator.standalone === true;
+
+  document.getElementById('mode').textContent =
+    isStandalone ? '✅ Running as installed app' : '❌ Running in browser';
+
+  document.getElementById('loaded').textContent =
+    'Loaded at: ' + new Date().toLocaleTimeString();
+</script>
+<script>
+  function updateNetwork() {
+    document.getElementById('network').textContent =
+      navigator.onLine ? '🟢 Online' : '🔴 Offline';
+  }
+
+  window.addEventListener('online', updateNetwork);
+  window.addEventListener('offline', updateNetwork);
+  updateNetwork();
+</script>
+</body>
